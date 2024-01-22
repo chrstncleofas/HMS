@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{% static 'css/business.css' %}">
+        <title>HMS Register</title>
+    </head>
+<body>
+    <input type="checkbox" id="modal-toggle" {% if registration_successful %} checked {% endif %} hidden>
+    <div class="modal">
+        <label for="modal-toggle" class="modal-close">&#10005;</label>
+        <h2 style="margin-bottom: 10px;">Registration Successful</h2>
+        <p>Your account has been created successfully!</p>
+        <a href="{% url 'login_page' %}" class="btn-ok">OK</a>
+    </div>
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form class="sign-in-form" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <h2 class="title">Sign Up</h2>
+                    <div class="input-field">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" name="signup-username" id="signup-username" placeholder="Username" required>
+                    </div>
+                    <div class="input-field">
+                        <i class='bx bxs-envelope'></i>
+                        <input type="email" name="signup-email" id="signup-email" placeholder="Email" required>
+                    </div>
+                    <div class="input-field">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" name="signup-password" id="signup-password" placeholder="Password" required>
+                    </div>
+                    <input type="submit" value="Sign Up" class="btn solid">
+                </form>
+            </div>
+        </div>
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>Already have an account? Log in</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora, illo. Vitae, nesciunt.
+                    </p>
+                    <a href="{% url 'login_page' %}" style="text-decoration: none; color: white;">
+                        <button class="btn transparent" id="sign-up-btn">Login</button>
+                    </a>
+                </div>
+                <img src="{% static  'images/Authentication_Isometric.png' %}" class="image" alt="">
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

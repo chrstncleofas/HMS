@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/edit.css' %}">
+    <link rel="stylesheet" href="{% static 'css/business.css' %}">
+    <title>HMS Application</title>
+</head>
+
+<body>
+    {% block content %}
+    {% if user.is_authenticated %}
+        <p>
+            {% comment %} for future ref {% endcomment %}
+        </p>
+    {% else %}
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form class="sign-in-form" method="post" action="{% url 'login_page' %}">
+                    <h2 style="text-align: center; font-size: 43px; margin-bottom: 10px;">Hotel Management System</h2>
+                    {% if messages %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                {% for message in messages %}
+                                    alert("{{ message }}");
+                                {% endfor %}
+                            });
+                        </script>
+                    {% endif %}
+                    {% csrf_token %}
+                    <div class="input-field">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" name="login-username" id="login-username" placeholder="Username" required>
+                    </div>
+                    <div class="input-field">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" name="login-password" id="login-password" placeholder="Password" required>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn" onclick="showCustomAlert()">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>No account yet? Click sign up button</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora, illo. Vitae, nesciunt.
+                    </p>
+                    <a href="{% url 'register' %}" style="text-decoration: none; color: white;">
+                        <button class="btn transparent" id="sign-up-btn">Sign up</button>
+                    </a>
+                </div>
+                <img src="{% static  'images/Profiling_Monochromatic.png' %}" class="image" alt="">
+            </div>
+        </div>   
+    </div>
+    {% endif %}
+    {% endblock content %}
+</body>
+</html>

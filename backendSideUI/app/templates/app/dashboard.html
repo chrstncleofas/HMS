@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Montserrat Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Static Css -->
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <title>HMS Dashboard</title>
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+        <div class="grid-container">
+            <!-- Header -->
+            <header class="header">
+                <div class="menu-icon" onclick="openSidebar()">
+                    <span class="material-icons-outlined">menu</span>
+                </div>
+                <div class="header-left">
+                    <span class="material-icons-outlined">search</span>
+                </div>
+                <!-- For logout -->
+                <div class="header-right">
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#logout">
+                        <span class="material-icons-outlined">account_circle</span> Logout
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal" id="logout" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Logout</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure do want to leave this page</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form>
+                                    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+                                </form>
+                              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div> <!---Logout end section-->
+                </div>
+            </header>
+            <!-- Sidebar -->
+            <aside id="sidebar">
+                <div class="sidebar-title">
+                    <div class="sidebar-brand">
+                        <span class="material-icons-outlined">inventory</span> HMS Admin
+                    </div>
+                    <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+                </div>
+                <ul class="sidebar-list">
+                    <li class="sidebar-list-item">
+                        <a href="{% url 'dashboard' %}">
+                            <span class="material-icons-outlined">dashboard</span> Dashboard
+                        </a>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <a href="#">
+                            <span class="material-icons-outlined">check_box</span> Check Inn/Out
+                        </a>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <a href="{% url 'allList' %}">
+                            <span class="material-icons-outlined">list_alt</span> List of Bookings
+                        </a>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <a href="#">
+                            <span class="material-icons-outlined">inventory</span> Inventory
+                        </a>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <a href="#">
+                            <span class="material-icons-outlined">summarize</span> Reports
+                        </a>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <a href="{% url 'allUser' %}">
+                            <span class="material-icons-outlined">group</span> User Management
+                        </a>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <a href="#">
+                            <span class="material-icons-outlined">settings</span> Settings
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <!-- Main -->
+            <main class="main-container">
+                <div class="main-title">
+                    <p class="font-weight-bold">Welcome, {{ first_name }} {{ last_name }}</p>
+                </div>
+                <div class="main-cards">
+                    <div class="card">
+                        <div class="card-inner">
+                            <p class="text-primary">List of Book</p>
+                            <span class="material-icons-outlined text-orange">list_alt</span>
+                        </div>
+                        <span class="text-primary font-weight-bold">{{ total_bookings }}</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-inner">
+                            <p class="text-primary">Total Guest</p>
+                            <span class="material-icons-outlined text-orange">format_list_numbered</span>
+                        </div>
+                        <span class="text-primary font-weight-bold">{{ total_bookings }}</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-inner">
+                            <p class="text-primary">Total Sales</p>
+                            <span class="material-icons-outlined text-orange">list_alt</span>
+                        </div>
+                        <span class="text-primary font-weight-bold">12,000,000</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-inner">
+                            <p class="text-primary">Total Users</p>
+                            <span class="material-icons-outlined text-orange">group</span>
+                        </div>
+                        <span class="text-primary font-weight-bold">{{ total_users }}</span>
+                    </div>
+                </div>
+                <div class="charts">
+                    <div class="charts-card">
+                        <p class="chart-title">Guest List</p>
+                        <div id="bar-chart">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Full Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Info</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in booking %}
+                                        <tr>
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.phone }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary me-1" href="{% url 'view_info' item.id %}"
+                                                    data-bs-toggle="modal" data-bs-target="#myModal{{item.id}}">
+                                                    <i class="fa-solid fa-circle-info fa-lg"></i>
+                                                </button>
+                                                <!-- Modal -->
+                                                <div class="modal" id="myModal{{item.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title">Person : {{ item.name }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true"></span>
+                                                        </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        <ul class="list-unstyled">
+                                                            <li>Full name : <strong>{{ item.name }}</strong></li>
+                                                            <li>Email : <strong>{{ item.email }}</strong></li>
+                                                            <li>Mobile No : <strong>{{ item.phone }}</strong></li>
+                                                            <li>Gender : <strong>{{ item.gender }}</strong></li>
+                                                        </ul>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="charts-card">
+                        <p class="chart-title">Recently Login</p>
+                        <div id="bar-chart">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in recently_logged_in_users %}
+                                        <tr>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.last_login|date:"Y-m-d" }}</td>
+                                            <td>{{ user.last_login|time:"h:i:s A" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!-- End Main -->
+        </div>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
